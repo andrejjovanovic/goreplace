@@ -13,17 +13,25 @@ func main() {
 
 	var configFileName string
 	var manifestFileName string
+	var environment string
 
-	flag.StringVar(&manifestFileName, "m", "", "JSON manifest to parse.")
-	flag.StringVar(&configFileName, "c", "", "Config file to process.")
+	flag.StringVar(&manifestFileName, "m", "", "JSON manifest to parse")
+	flag.StringVar(&configFileName, "c", "", "Config file to process")
+	flag.StringVar(&environment, "e", "", "Environment to use")
     flag.Parse()
 
     if manifestFileName == "" {
         fmt.Println("Please provide JSON file by using -m option")
         return
 	}
+	
 	if configFileName == "" {
         fmt.Println("Please provide config file by using -c option")
+        return
+	}
+
+	if environment == "" {
+        fmt.Println("Please provide environment by using -e option")
         return
 	}
 
@@ -36,7 +44,7 @@ func main() {
 	var result map[string]interface{}
 	json.Unmarshal([]byte(manifestJson), &result)
 
-	manifest := result["credentials"].(map[string]interface{})
+	manifest := result[environment].(map[string]interface{})
 
 	for key, value := range manifest {
 
